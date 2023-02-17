@@ -4,6 +4,8 @@ from netbox.models import NetBoxModel
 
 from utilities.choices import ChoiceSet
 
+from django.urls import reverse
+
 class ActionChoices(ChoiceSet):
     key = 'AccessListRule.action'
 
@@ -42,6 +44,9 @@ class AccessList(NetBoxModel):
     
     def get_default_action_color(self):
         return ActionChoices.colors.get(self.default_action)
+    
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_access_lists:accesslist', args=[self.pk])
 
 
 class AccessListRule(NetBoxModel):
@@ -111,6 +116,9 @@ class AccessListRule(NetBoxModel):
 
     def get_action_color(self):
         return ActionChoices.colors.get(self.action)
+
+    def get_absolute_url(self):
+        return reverse('plugins:netbox_access_lists:accesslistrule', args=[self.pk])
 
 
     
