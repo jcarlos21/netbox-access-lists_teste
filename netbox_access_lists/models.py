@@ -4,10 +4,35 @@ from netbox.models import NetBoxModel
 
 from utilities.choices import ChoiceSet
 
+class ActionChoices(ChoiceSet):
+    key = 'AccessListRule.action'
+
+    CHOICES = [
+        ('permit', 'Permit', 'green'),
+        ('deny', 'Deny', 'red'),
+        ('reject', 'Reject (Reset)', 'orange'),
+    ]
+
+
+class ProtocolChoices(ChoiceSet):
+
+    CHOICES = [
+        ('tcp', 'TCP', 'blue'),
+        ('udp', 'UDP', 'orange'),
+        ('icmp', 'ICMP', 'purple'),
+    ]
+
+
 class AccessList(NetBoxModel):
     name = models.CharField(max_length=100)
     default_action = models.CharField(max_length=30)
     comments = models.TextField(blank=True)
+
+    # AccessList
+    default_action = models.CharField(
+        max_length=30,
+        choices=ActionChoices
+    )
 
     class Meta:
         ordering = ('name',)
@@ -61,6 +86,20 @@ class AccessListRule(NetBoxModel):
         max_length=500,
         blank=True
     )
+
+    # AccessListRule
+    action = models.CharField(
+        max_length=30,
+        choices=ActionChoices
+    )
+
+    # AccessListRule
+    protocol = models.CharField(
+        max_length=30,
+        choices=ProtocolChoices,
+        blank=True
+    )
+    
     class Meta:
         ordering = ('access_list', 'index')
         unique_together = ('access_list', 'index')
@@ -74,38 +113,4 @@ class AccessListRule(NetBoxModel):
         return ActionChoices.colors.get(self.action)
 
 
-class ActionChoices(ChoiceSet):
-    key = 'AccessListRule.action'
-
-    CHOICES = [
-        ('permit', 'Permit', 'green'),
-        ('deny', 'Deny', 'red'),
-        ('reject', 'Reject (Reset)', 'orange'),
-    ]
-
-    # AccessList
-    default_action = models.CharField(
-        max_length=30,
-        choices=ActionChoices
-    )
-
-    # AccessListRule
-    action = models.CharField(
-        max_length=30,
-        choices=ActionChoices
-    )
-
-class ProtocolChoices(ChoiceSet):
-
-    CHOICES = [
-        ('tcp', 'TCP', 'blue'),
-        ('udp', 'UDP', 'orange'),
-        ('icmp', 'ICMP', 'purple'),
-    ]
-
-    # AccessListRule
-    protocol = models.CharField(
-        max_length=30,
-        choices=ProtocolChoices,
-        blank=True
-    )
+    
