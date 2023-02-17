@@ -15,13 +15,6 @@ class AccessListForm(NetBoxModelForm):
 
 class AccessListRuleForm(NetBoxModelForm):
 
-    class Meta:
-        model = AccessListRule
-        fields = (
-            'access_list', 'index', 'description', 'source_prefix', 'source_ports', 'destination_prefix',
-            'destination_ports', 'protocol', 'action', 'tags',
-        )
-    
     access_list = DynamicModelChoiceField(
         queryset=AccessList.objects.all()
     )
@@ -31,3 +24,11 @@ class AccessListRuleForm(NetBoxModelForm):
     destination_prefix = DynamicModelChoiceField(
         queryset=Prefix.objects.all()
     )
+
+    class Meta:
+        model = AccessListRule
+        fields = (
+            'access_list', 'index', 'description', 'source_prefix', 'source_ports', 'destination_prefix',
+            'destination_ports', 'protocol', 'action', 'tags',
+        )
+    
