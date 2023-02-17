@@ -2,6 +2,8 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from netbox.models import NetBoxModel
 
+from utilities.choices import ChoiceSet
+
 class AccessList(NetBoxModel):
     name = models.CharField(max_length=100)
     default_action = models.CharField(max_length=30)
@@ -61,3 +63,40 @@ class AccessListRule(NetBoxModel):
         unique_together = ('access_list', 'index')
     def __str__(self):
         return f'{self.access_list}: Rule {self.index}'
+
+
+class ActionChoices(ChoiceSet):
+    key = 'AccessListRule.action'
+
+    CHOICES = [
+        ('permit', 'Permit', 'green'),
+        ('deny', 'Deny', 'red'),
+        ('reject', 'Reject (Reset)', 'orange'),
+    ]
+
+    # AccessList
+    default_action = models.CharField(
+        max_length=30,
+        choices=ActionChoices
+    )
+
+    # AccessListRule
+    action = models.CharField(
+        max_length=30,
+        choices=ActionChoices
+    )
+
+class ProtocolChoices(ChoiceSet):
+
+    CHOICES = [
+        ('tcp', 'TCP', 'blue'),
+        ('udp', 'UDP', 'orange'),
+        ('icmp', 'ICMP', 'purple'),
+    ]
+
+    # AccessListRule
+    protocol = models.CharField(
+        max_length=30,
+        choices=ProtocolChoices,
+        blank=True
+    )
