@@ -1,8 +1,0 @@
-README.md
-setup.py
-netbox_access_lists/__init__.py
-netbox_access_lists.egg-info/PKG-INFO
-netbox_access_lists.egg-info/SOURCES.txt
-netbox_access_lists.egg-info/dependency_links.txt
-netbox_access_lists.egg-info/not-zip-safe
-netbox_access_lists.egg-info/top_level.txt
